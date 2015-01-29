@@ -5,8 +5,8 @@ import java.util.Set;
 
 public class User {
 
-    private String userName;
-    private int versionNumber;
+    private String userName; //would like to enforce uniqueness some how, normally would rely on db for that
+    private int versionNumber = 0;
     private Set<User> coaches = new HashSet<User>();
     private Set<User> students = new HashSet<User>();
     
@@ -18,10 +18,12 @@ public class User {
     public int getVersionNumber() { return versionNumber; }
     public void setVersionNumber(int versionNumber) { this.versionNumber = versionNumber; }
     public Set<User> getCoaches() { return coaches; }
-    public void setCoaches(Set<User> coaches) { this.coaches = coaches; }
+    //public void setCoaches(Set<User> coaches) { this.coaches = coaches; }
+    public void addCoach(User coach) { this.coaches.add(coach); }
     public Set<User> getStudents() { return students; }
-    public void setStudents(Set<User> students) { this.students = students;}
-
+    //public void setStudents(Set<User> students) { this.students = students;}
+    public void addStudent(User student) { this.students.add(student); }
+    
     @Override public int hashCode() {
         return userName.hashCode();
     }
