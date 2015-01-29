@@ -25,9 +25,22 @@ public class InfectorImpl implements Infector {
         return numInfected;
     }
 
+    @Override public int nearlyLimitedInfection(Set<User> allUsers, int numToInfect, int versionNumber) {
+        int numInfected = 0;
+        for (User user : allUsers) {
+            if (numInfected < numToInfect) {
+                numInfected += infectAll(user, versionNumber);
+            } else {
+                break;
+            }
+        }
+        return numInfected;
+    }
+
     @Override public boolean limitedInfection(Set<User> allUsers, int numToInfect, int versionNumber) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    
 }
