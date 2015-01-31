@@ -14,7 +14,11 @@ import org.junit.Test;
 
 public class InfectorImplTests {
 
-    private InfectorImpl infector = new InfectorImpl();
+    private Infector infector = new InfectorImpl();
+    
+    /************************************************************************
+     * Infect the whole class
+     ***********************************************************************/
     
     @Test public void infectAll() {
         int numCoaches = 1;
@@ -22,6 +26,10 @@ public class InfectorImplTests {
         User user = createClass(numCoaches,numStudents, "0");
         int numInfected = infector.infectAll(user, 1);
         assertTrue(numCoaches + numStudents == numInfected);
+        assertTrue(user.getVersionNumber() == 1);
+        for (User student : user.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
     }
 
     @Test public void infectAll1() {
@@ -30,6 +38,10 @@ public class InfectorImplTests {
         User user = createClass(numCoaches,numStudents, "0");
         int numInfected = infector.infectAll(user, 1);
         assertTrue(numCoaches + numStudents == numInfected);
+        assertTrue(user.getVersionNumber() == 1);
+        for (User student : user.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
     }
 
     @Test public void infectAll2() {
@@ -38,24 +50,58 @@ public class InfectorImplTests {
         User user = createClass(numCoaches,numStudents, "0");
         int numInfected = infector.infectAll(user, 1);
         assertTrue(numCoaches + numStudents == numInfected);
+        assertTrue(user.getVersionNumber() == 1);
+        for (User student : user.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
+    }
+    
+    //this is about the upper limit of what I can run on my machine
+    @Test public void infectAllLarge() {
+        int numCoaches = 200;
+        int numStudents = 6000;
+        User user = createClass(numCoaches,numStudents, "0");
+        int numInfected = infector.infectAll(user, 1);
+        assertTrue(numCoaches + numStudents == numInfected);
+        assertTrue(user.getVersionNumber() == 1);
+        for (User student : user.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
     }
 
+    /************************************************************************
+     * Infect the whole class for edge case classes
+     ***********************************************************************/
+    
     @Test public void infectAllInConnectedClasses() {
         User coachOfClass1 = createClassesConnectedByTutor(2, 30);
         int numInfected = infector.infectAll(coachOfClass1, 1);
         assertEquals(2 * 32 + 1, numInfected);
+        assertTrue(coachOfClass1.getVersionNumber() == 1);
+        for (User student : coachOfClass1.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
     }
-    
+
     @Test public void studentIsAlsoTeacher() {
         User coach = createClassWithStudentTeacher(1, 30);
         int numInfected = infector.infectAll(coach, 1);
         assertEquals(2 * 31, numInfected);
+        assertTrue(coach.getVersionNumber() == 1);
+        for (User student : coach.getStudents()) {
+            assertTrue(student.getVersionNumber() == 1);
+        }
     }
 
-    //Some students in multiple classes
+    //TODO Some students in multiple classes
+    
+    /************************************************************************
+     * Infect each class until you reach/pass the target
+     * 
+     * allUsers is not actually all users, rather one user from each class, so infectAll should reach all users
+     ***********************************************************************/
     
     @Test public void nearlyLimitedInfection() {
-        //not actually all users, but one user from each class, so infectAll would reach all users
         Set<User> allUsers = new HashSet<User>();
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
@@ -66,7 +112,6 @@ public class InfectorImplTests {
     }
     
     @Test public void nearlyLimitedInfection1() {
-        //not actually all users, but one user from each class, so infectAll would reach all users
         Set<User> allUsers = new HashSet<User>();
         for (int i = 0; i < 3; i++) {
             User user = createClass(2,5,String.valueOf(i));
@@ -75,9 +120,9 @@ public class InfectorImplTests {
         int numInfected = infector.nearlyLimitedInfection(allUsers, 12, 1);
         assertEquals(14,numInfected);
     }
+    
 
     @Test public void nearlyLimitedInfection2() {
-        //not actually all users, but one user from each class, so infectAll would reach all users
         Set<User> allUsers = new HashSet<User>();
         for (int i = 0; i < 10; i++) {
             User user = createClass(2,30,String.valueOf(i));
@@ -86,6 +131,7 @@ public class InfectorImplTests {
         int numInfected = infector.nearlyLimitedInfection(allUsers, 100, 1);
         assertEquals(128,numInfected);
     }
+    
 
     @Test public void nearlyLimitedInfectionWithUnusualClassesAndHighMax() {
         Set<User> allUsers = new HashSet<User>();
@@ -105,6 +151,55 @@ public class InfectorImplTests {
         //just a quirk of hashing that determines order in which each group is infected
         assertEquals(129, numInfected);
     }
+    
+    /************************************************************************
+     * Infect each class until you hit the target, or fail
+     ***********************************************************************/
+     
+    @Test public void limitedInfectionPass() {
+        Set<User> allUsers = new HashSet<User>();
+        // 3 classes of 4 users
+        for (int i = 0; i < 3; i++) {
+            User user = createClass(1,3,String.valueOf(i));
+            allUsers.add(user);
+        }
+        boolean infected = infector.limitedInfection(allUsers, 4, 1);
+        assertTrue(infected);
+        //can't know which graphs were infected
+        /*for (User user : allUsers) {
+            assertTrue(user.getVersionNumber() == 1);
+            for (User student : user.getStudents()) {
+                assertTrue(student.getVersionNumber() == 1);
+            }
+        }*/
+    }
+    
+    @Test public void limitedInfectionFail() {
+        Set<User> allUsers = new HashSet<User>();
+        // 3 classes of 4 users
+        for (int i = 0; i < 3; i++) {
+            User user = createClass(1,3,String.valueOf(i));
+            allUsers.add(user);
+        }
+        boolean infected = infector.limitedInfection(allUsers, 5, 1);
+        assertTrue(!infected);
+        //make sure no one was infected
+        for (User user : allUsers) {
+            assertTrue(user.getVersionNumber() == 0);
+            for (User student : user.getStudents()) {
+                assertTrue(student.getVersionNumber() == 0);
+            }
+        }
+    }
+    
+    /************************************************************************
+     * Helper functions to create different class configurations.
+     * Because username drives identity of a user making it a function of
+     * student vs teacher + an incremented value + class
+     * 
+     * Basically trying to simulate what you might get back from a db if you pulled
+     * users by class.
+     ***********************************************************************/
     
     private User createClass(int numCoaches, int numStudents, String classCode) {
         if (numCoaches == 0 && numStudents == 0) return null;
