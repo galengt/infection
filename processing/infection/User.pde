@@ -29,4 +29,12 @@ class User {
       line(coach.x, coach.y, x, y);
     }
   }
+  
+  boolean overMe()  {
+    if (mouseX >= x - 25 && mouseX <= x+25 &&  mouseY >= y - 25 && mouseY <= y+25) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
