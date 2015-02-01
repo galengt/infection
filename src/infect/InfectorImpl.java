@@ -8,7 +8,7 @@ import model.User;
 public class InfectorImpl implements Infector {
 
     @Override public int infectAll(User user, int versionNumber) {
-        //depth first search
+        //breadth first search
         int numInfected = 0;
         // checking to see if we already infected this user so we don't double count
         if (user.getVersionNumber() != versionNumber) {
@@ -41,7 +41,7 @@ public class InfectorImpl implements Infector {
     @Override public boolean limitedInfection(Set<User> allUsers, int numToInfect, int versionNumber) {
         int totalNumInfected = 0;
         Set<User> infectedGraphs = new HashSet<User>();
-        // there is probably a recursive backtracking approach, pretty sure this misses some possible success cases
+        // there is probably a recursive backtracking approach, this misses some possible success cases
         for (User user : allUsers) {
             int numInfected = infectAll(user, versionNumber);
             if (numInfected + totalNumInfected > numToInfect) {
@@ -63,6 +63,4 @@ public class InfectorImpl implements Infector {
             return false;
         }
     }
-
-    
 }

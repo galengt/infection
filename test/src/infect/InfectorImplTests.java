@@ -192,6 +192,40 @@ public class InfectorImplTests {
         }
     }
     
+    @Test public void limitedInfectionWithUnusualClassesPass() {
+        Set<User> allUsers = new HashSet<User>();
+        allUsers.add(createClass(2,30, "0")); // infects 32
+        allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
+        allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        boolean infected = infector.limitedInfection(allUsers, 96, 1);
+        assertTrue(infected);
+    }
+
+    @Test public void limitedInfectionWithUnusualClassesFail() {
+        Set<User> allUsers = new HashSet<User>();
+        allUsers.add(createClass(2,30, "0")); // infects 32
+        allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
+        allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        boolean infected = infector.limitedInfection(allUsers, 95, 1);
+        assertTrue(!infected);
+        //make sure no one was infected
+        for (User user : allUsers) {
+            assertTrue(user.getVersionNumber() == 0);
+            for (User student : user.getStudents()) {
+                assertTrue(student.getVersionNumber() == 0);
+            }
+        }
+    }
+    
+    @Test public void limitedInfectionShouldBacktrack() {
+        Set<User> allUsers = new HashSet<User>();
+        allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        allUsers.add(createClassesConnectedByTutor(2,30)); // infects 65
+        //This test should pass, but it fails. Haven't solved the backtracking algo yet.
+        boolean infected = infector.limitedInfection(allUsers, 65, 1);
+        assertTrue(infected);
+    }
+    
     /************************************************************************
      * Helper functions to create different class configurations.
      * Because username drives identity of a user making it a function of
