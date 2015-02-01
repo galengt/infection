@@ -225,6 +225,20 @@ public class InfectorImplTests {
         assertTrue(infected);
     }
     
+    @Test public void limitedInfectionShouldBacktrackLargeSet() {
+        List<User> allUsers = new ArrayList<User>();
+        // this is about the max I can do on my machine before having memory issues
+        for (int i = 0; i < 7000; i++) {
+            User user = createClass(2,30,String.valueOf(i));
+            allUsers.add(user);
+        }
+        allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        allUsers.add(createClassesConnectedByTutor(2,30)); // infects 65
+        allUsers.add(createClass(1,30, "winner!")); // infects 31
+        boolean infected = infector.limitedInfection(allUsers, 31, 1);
+        assertTrue(infected);
+    }
+    
     /************************************************************************
      * Helper functions to create different class configurations.
      * Because username drives identity of a user making it a function of

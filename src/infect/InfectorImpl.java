@@ -1,6 +1,5 @@
 package infect;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +40,7 @@ public class InfectorImpl implements Infector {
     }
 
     @Override public boolean limitedInfection(List<User> allUsers, int numToInfect, int versionNumber) {
+        if (allUsers == null || allUsers.isEmpty()) return false;
         int totalNumInfected = 0;
         Set<User> infectedGraphs = new HashSet<User>();
         // there is probably a recursive backtracking approach, this misses some possible success cases
@@ -56,11 +56,8 @@ public class InfectorImpl implements Infector {
             if (totalNumInfected == numToInfect) return true;
         }
         // if we haven't succeed, try removing the first item and trying again
-        List<User> allUsersLessOne = new ArrayList<User>();
-        for (int i = 1; i < allUsers.size(); i++) {
-            allUsersLessOne.add(allUsers.get(i));
-        }
-        if (!allUsersLessOne.isEmpty() && limitedInfection(allUsersLessOne, numToInfect, versionNumber)) {
+        allUsers.remove(0);
+        if (limitedInfection(allUsers, numToInfect, versionNumber)) {
             return true;
         } else {
             //we failed, rollback all
