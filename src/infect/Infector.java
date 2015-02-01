@@ -1,5 +1,6 @@
 package infect;
 
+import java.util.List;
 import java.util.Set;
 
 import model.User;
@@ -44,5 +45,5 @@ public interface Infector {
      * @param versionNumber
      * @return true if exact number were infected, false otherwise
      */
-    public boolean limitedInfection(Set<User> allUsers, int numToInfect, int versionNumber); 
+    public boolean limitedInfection(List<User> allUsers, int numToInfect, int versionNumber); 
 }

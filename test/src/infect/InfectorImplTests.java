@@ -157,7 +157,7 @@ public class InfectorImplTests {
      ***********************************************************************/
      
     @Test public void limitedInfectionPass() {
-        Set<User> allUsers = new HashSet<User>();
+        List<User> allUsers = new ArrayList<User>();
         // 3 classes of 4 users
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
@@ -175,7 +175,7 @@ public class InfectorImplTests {
     }
     
     @Test public void limitedInfectionFail() {
-        Set<User> allUsers = new HashSet<User>();
+        List<User> allUsers = new ArrayList<User>();
         // 3 classes of 4 users
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
@@ -193,7 +193,7 @@ public class InfectorImplTests {
     }
     
     @Test public void limitedInfectionWithUnusualClassesPass() {
-        Set<User> allUsers = new HashSet<User>();
+        List<User> allUsers = new ArrayList<User>();
         allUsers.add(createClass(2,30, "0")); // infects 32
         allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
@@ -202,7 +202,7 @@ public class InfectorImplTests {
     }
 
     @Test public void limitedInfectionWithUnusualClassesFail() {
-        Set<User> allUsers = new HashSet<User>();
+        List<User> allUsers = new ArrayList<User>();
         allUsers.add(createClass(2,30, "0")); // infects 32
         allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
@@ -218,10 +218,9 @@ public class InfectorImplTests {
     }
     
     @Test public void limitedInfectionShouldBacktrack() {
-        Set<User> allUsers = new HashSet<User>();
+        List<User> allUsers = new ArrayList<User>();
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
         allUsers.add(createClassesConnectedByTutor(2,30)); // infects 65
-        //This test should pass, but it fails. Haven't solved the backtracking algo yet.
         boolean infected = infector.limitedInfection(allUsers, 65, 1);
         assertTrue(infected);
     }
