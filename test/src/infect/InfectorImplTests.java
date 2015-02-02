@@ -21,52 +21,80 @@ public class InfectorImplTests {
      ***********************************************************************/
     
     @Test public void infectAll() {
+        long start = System.currentTimeMillis();
         int numCoaches = 1;
         int numStudents = 3;
+        System.out.println("Creating a class with " + numCoaches + " coaches and " + numStudents + " students");
         User user = createClass(numCoaches,numStudents, "0");
+        System.out.println("Infecting class");
         int numInfected = infector.infectAll(user, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertTrue(numCoaches + numStudents == numInfected);
         assertTrue(user.getVersionNumber() == 1);
         for (User student : user.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     @Test public void infectAll1() {
+        long start = System.currentTimeMillis();
         int numCoaches = 2;
         int numStudents = 10;
+        System.out.println("Creating a class with " + numCoaches + " coaches and " + numStudents + " students");
         User user = createClass(numCoaches,numStudents, "0");
+        System.out.println("Infecting class");
         int numInfected = infector.infectAll(user, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertTrue(numCoaches + numStudents == numInfected);
         assertTrue(user.getVersionNumber() == 1);
         for (User student : user.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     @Test public void infectAll2() {
+        long start = System.currentTimeMillis();
         int numCoaches = 40;
         int numStudents = 300;
+        System.out.println("Creating a class with " + numCoaches + " coaches and " + numStudents + " students");
         User user = createClass(numCoaches,numStudents, "0");
+        System.out.println("Infecting class");
         int numInfected = infector.infectAll(user, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertTrue(numCoaches + numStudents == numInfected);
         assertTrue(user.getVersionNumber() == 1);
         for (User student : user.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     //this is about the upper limit of what I can run on my machine
     @Test public void infectAllLarge() {
+        long start = System.currentTimeMillis();
         int numCoaches = 200;
         int numStudents = 6000;
+        System.out.println("Creating a class with " + numCoaches + " coaches and " + numStudents + " students");
         User user = createClass(numCoaches,numStudents, "0");
+        System.out.println("Infecting class");
         int numInfected = infector.infectAll(user, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertTrue(numCoaches + numStudents == numInfected);
         assertTrue(user.getVersionNumber() == 1);
         for (User student : user.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     /************************************************************************
@@ -74,23 +102,37 @@ public class InfectorImplTests {
      ***********************************************************************/
     
     @Test public void infectAllInConnectedClasses() {
+        long start = System.currentTimeMillis();
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         User coachOfClass1 = createClassesConnectedByTutor(2, 30);
+        System.out.println("Infecting classes");
         int numInfected = infector.infectAll(coachOfClass1, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(2 * 32 + 1, numInfected);
         assertTrue(coachOfClass1.getVersionNumber() == 1);
         for (User student : coachOfClass1.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     @Test public void studentIsAlsoTeacher() {
+        long start = System.currentTimeMillis();
+        System.out.println("Creating two classes with " + 1 + " coach and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         User coach = createClassWithStudentTeacher(1, 30);
+        System.out.println("Infecting class");
         int numInfected = infector.infectAll(coach, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(2 * 31, numInfected);
         assertTrue(coach.getVersionNumber() == 1);
         for (User student : coach.getStudents()) {
             assertTrue(student.getVersionNumber() == 1);
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     //TODO Some students in multiple classes
@@ -102,54 +144,92 @@ public class InfectorImplTests {
      ***********************************************************************/
     
     @Test public void nearlyLimitedInfection() {
+        long start = System.currentTimeMillis();
         Set<User> allUsers = new HashSet<User>();
+        System.out.println("Creating 3 classes with " + 1 + " coach and " + 3 + " students each");
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Infecting classes with nearlyLimitedInfection and limit of 5");
         int numInfected = infector.nearlyLimitedInfection(allUsers, 5, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(8,numInfected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     @Test public void nearlyLimitedInfection1() {
+        long start = System.currentTimeMillis();
         Set<User> allUsers = new HashSet<User>();
+        System.out.println("Creating 3 classes with " + 2 + " coaches and " + 3 + " students each");
         for (int i = 0; i < 3; i++) {
             User user = createClass(2,5,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Infecting classes with nearlyLimitedInfection and limit of 12");
         int numInfected = infector.nearlyLimitedInfection(allUsers, 12, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(14,numInfected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
 
     @Test public void nearlyLimitedInfection2() {
+        long start = System.currentTimeMillis();
         Set<User> allUsers = new HashSet<User>();
         for (int i = 0; i < 10; i++) {
             User user = createClass(2,30,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Infecting classes with nearlyLimitedInfection and limit of 100");
         int numInfected = infector.nearlyLimitedInfection(allUsers, 100, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(128,numInfected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
 
     @Test public void nearlyLimitedInfectionWithUnusualClassesAndHighMax() {
+        long start = System.currentTimeMillis();
         Set<User> allUsers = new HashSet<User>();
+        System.out.println("Creating a class with " + 2 + " coach and " + 30 + " students");
         allUsers.add(createClass(2,30, "0"));
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30));
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30));
+        System.out.println("Infecting classes with nearlyLimitedInfection and limit of 1000");
         int numInfected = infector.nearlyLimitedInfection(allUsers, 1000, 1);
+        System.out.println("Infected " + numInfected + " users");
         assertEquals(32 + 65 + 64, numInfected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     @Test public void nearlyLimitedInfectionWithUnusualClasses() {
+        long start = System.currentTimeMillis();
         Set<User> allUsers = new HashSet<User>();
+        System.out.println("Creating a class with " + 2 + " coach and " + 30 + " students");
         allUsers.add(createClass(2,30, "0")); // infects 32
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
+        System.out.println("Creating two classes with " + 1 + " coaches and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        System.out.println("Infecting classes with nearlyLimitedInfection and limit of 100");
         int numInfected = infector.nearlyLimitedInfection(allUsers, 100, 1);
+        System.out.println("Infected " + numInfected + " users");
         //just a quirk of hashing that determines order in which each group is infected
         assertEquals(129, numInfected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     /************************************************************************
@@ -157,14 +237,21 @@ public class InfectorImplTests {
      ***********************************************************************/
      
     @Test public void limitedInfectionPass() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
         // 3 classes of 4 users
+        System.out.println("Creating 3 classes with " + 1 + " coach and " + 3 + " students each");
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Infecting classes with limitedInfection and limit of 4");
         boolean infected = infector.limitedInfection(allUsers, 4, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(infected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
         //can't know which graphs were infected
         /*for (User user : allUsers) {
             assertTrue(user.getVersionNumber() == 1);
@@ -175,13 +262,17 @@ public class InfectorImplTests {
     }
     
     @Test public void limitedInfectionFail() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
         // 3 classes of 4 users
+        System.out.println("Creating 3 classes with " + 1 + " coach and " + 3 + " students each");
         for (int i = 0; i < 3; i++) {
             User user = createClass(1,3,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Infecting classes with limitedInfection and limit of 5");
         boolean infected = infector.limitedInfection(allUsers, 5, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(!infected);
         //make sure no one was infected
         for (User user : allUsers) {
@@ -190,23 +281,41 @@ public class InfectorImplTests {
                 assertTrue(student.getVersionNumber() == 0);
             }
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     @Test public void limitedInfectionWithUnusualClassesPass() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
+        System.out.println("Creating a class with " + 2 + " coaches and " + 30 + " students");
         allUsers.add(createClass(2,30, "0")); // infects 32
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
+        System.out.println("Creating two classes with " + 1 + " coach and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        System.out.println("Infecting classes with limitedInfection and limit of 96");
         boolean infected = infector.limitedInfection(allUsers, 96, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(infected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
 
     @Test public void limitedInfectionWithUnusualClassesFail() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
+        System.out.println("Creating a class with " + 2 + " coaches and " + 30 + " students");
         allUsers.add(createClass(2,30, "0")); // infects 32
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30)); //infects 65
+        System.out.println("Creating two classes with " + 1 + " coach and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        System.out.println("Infecting classes with limitedInfection and limit of 95");
         boolean infected = infector.limitedInfection(allUsers, 95, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(!infected);
         //make sure no one was infected
         for (User user : allUsers) {
@@ -215,28 +324,48 @@ public class InfectorImplTests {
                 assertTrue(student.getVersionNumber() == 0);
             }
         }
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     @Test public void limitedInfectionShouldBacktrack() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
+        System.out.println("Creating two classes with " + 1 + " coach and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30)); // infects 65
+        System.out.println("Infecting classes with limitedInfection and limit of 65");
         boolean infected = infector.limitedInfection(allUsers, 65, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(infected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     @Test public void limitedInfectionShouldBacktrackLargeSet() {
+        long start = System.currentTimeMillis();
         List<User> allUsers = new ArrayList<User>();
         // this is about the max I can do on my machine before having memory issues
+        System.out.println("Creating 7000 classes with " + 2 + " coaches and " + 30 + " students each");
         for (int i = 0; i < 7000; i++) {
             User user = createClass(2,30,String.valueOf(i));
             allUsers.add(user);
         }
+        System.out.println("Creating two classes with " + 1 + " coach and " + 30 + " students each. Classes are connected by a user that is a students in class 1 and coach in class 2");
         allUsers.add(createClassWithStudentTeacher(2,30)); // infects 64
+        System.out.println("Creating two classes with " + 2 + " coaches and " + 30 + " students each. Classes are connected by a tutor with a student in each");
         allUsers.add(createClassesConnectedByTutor(2,30)); // infects 65
         allUsers.add(createClass(1,30, "winner!")); // infects 31
+        System.out.println("Infecting classes with limitedInfection and limit of 31");
         boolean infected = infector.limitedInfection(allUsers, 31, 1);
+        System.out.println("Were there infected users? " + (infected ? "yes" : "no"));
         assertTrue(infected);
+        long finish = System.currentTimeMillis();
+        System.out.println("Test took " + (finish - start) + " millis");
+        System.out.println();
     }
     
     /************************************************************************
