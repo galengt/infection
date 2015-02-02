@@ -9,7 +9,7 @@ The unit tests have fairly verbose output, so you can get a pretty good sense of
 
 ## Visualization with Processing
 
-Navigate to Infection/procession/infection in Finder or the Windows equivalent. 
+Navigate to Infection/processing/infection/ in Finder or the Windows equivalent. 
 
 For mac osx continue to application.macosx and there you will find infection.app.
 For windows run the .exe in the folder windows32 or windows64, depending on your operating system. 
