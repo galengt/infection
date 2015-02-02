@@ -9,7 +9,6 @@ import model.User;
 public class InfectorImpl implements Infector {
 
     @Override public int infectAll(User user, int versionNumber) {
-        //breadth first search
         int numInfected = 0;
         // checking to see if we already infected this user so we don't double count
         if (user.getVersionNumber() != versionNumber) {

@@ -29,7 +29,7 @@ public interface Infector {
     /**
      * Infects clusters of users until the threshold is reached. Values the constraint of
      * keeping all connected graphs on the same version over the constraint of numToInfect.
-     * @param allUsers - all known users
+     * @param allUsers - one user from each connected graph
      * @param numToInfect - the minimum number of users to get the new version. 
      * @param versionNumber
      * @return number of users infected
@@ -39,7 +39,7 @@ public interface Infector {
     /**
      * Values the constraint of keeping all connected graphs on the same version AND the constraint of numToInfect.
      * Fails if both can't be satisfied exactly with no version numbers having been changed.
-     * @param allUsers - all known users
+     * @param allUsers - one user from each connected graph
      * @param numToInfect - the number of users to get the new version. If the exact number
      * is not possible no users are infected.
      * @param versionNumber
